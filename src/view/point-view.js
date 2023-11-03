@@ -59,4 +59,4 @@ class NewPointView {
   }
 }
 
-export {NewEventView};
+export {NewPointView};

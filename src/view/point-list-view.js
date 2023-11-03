@@ -24,4 +24,4 @@ class NewPointListView {
   }
 }
 
-export {NewElemListView};
+export {NewPointListView};
