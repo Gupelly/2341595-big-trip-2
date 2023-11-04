@@ -3,6 +3,7 @@ import {NewNavView} from './view/nav-view.js';
 import {NewInfoView} from './view/info-view.js';
 import {NewPointView} from './view/point-view.js';
 import {NewPointListView} from './view/point-list-view.js';
+import { NewEmptyView } from './view/empty-list.js';
 import { points } from './model/points.js';
 
 const init = () => {
@@ -15,9 +16,18 @@ const init = () => {
   render(new NewNavView(), siteMenuElement);
   render(new NewPointListView(), mainEvents);
 
-  points.forEach((point) => {
-    render(new NewPointView(point), eventsList[0]);
-  });
+  // pointList нужен для того, чтобы продемострировать сообщение при отсутсвии точек маршрута.
+  // Чтобы увидеть сообщение, необходимо закоментить строку "pointList = points;".
+  let pointList = [];
+  pointList = points;
+  if (pointList.length === 0) {
+    render(new NewEmptyView(), mainEvents);
+  }
+  else {
+    pointList.forEach((point) => {
+      render(new NewPointView(point), eventsList[0]);
+    });
+  }
 };
 
 export {init};
