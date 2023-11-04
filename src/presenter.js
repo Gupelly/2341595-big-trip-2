@@ -1,8 +1,9 @@
 import {render} from './render.js';
 import {NewNavView} from './view/nav-view.js';
 import {NewInfoView} from './view/info-view.js';
-import {NewPointView} from "./view/point-view.js";
-import {NewPointListView} from "./view/point-list-view.js";
+import {NewPointView} from './view/point-view.js';
+import {NewPointListView} from './view/point-list-view.js';
+import { points } from './model/points.js';
 
 const init = () => {
   const headerTrip = document.querySelector('.trip-main');
@@ -14,9 +15,9 @@ const init = () => {
   render(new NewNavView(), siteMenuElement);
   render(new NewPointListView(), mainEvents);
 
-  for (var i = 0; i < 3; i++) {
-    render(new NewPointView(), eventsList[0]);
-  }
+  points.forEach((point) => {
+    render(new NewPointView(point), eventsList[0]);
+  });
 };
 
 export {init};

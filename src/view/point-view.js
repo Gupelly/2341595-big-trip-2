@@ -1,32 +1,35 @@
 import {createElement} from '../render.js';
+import { DateFormat, changeDateFormat, getDuration } from '../date.js';
 
-const createPointTemplate = () =>
+const createPointTemplate = (point) =>
   `
 <li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="2019-03-18">MAR 18</time>
+    <time class="event__date" datetime="${changeDateFormat(point.dateFrom, DateFormat.SERVICE_DAY)}">${changeDateFormat(point.dateFrom, DateFormat.DAY)}</time>
     <div class="event__type">
-      <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+      <img class="event__type-icon" width="42" height="42" src="img/icons/${point.type}.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">Taxi Amsterdam</h3>
+    <h3 class="event__title">${point.type} ${point.destination.name}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
+        <time class="event__start-time" datetime=${changeDateFormat(point.dateFrom, DateFormat.SERVICE)}">${changeDateFormat(point.dateFrom, DateFormat.VIEW)}</time>
         &mdash;
-        <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+        <time class="event__end-time" datetime=${changeDateFormat(point.dateTo, DateFormat.SERVICE)}">${changeDateFormat(point.dateTo, DateFormat.VIEW)}>11:00</time>
       </p>
-      <p class="event__duration">30M</p>
+      <p class="event__duration">${getDuration(point.dateFrom, point.dateTo)}</p>
     </div>
     <p class="event__price">
-      &euro;&nbsp;<span class="event__price-value">20</span>
+      &euro;&nbsp;<span class="event__price-value">${point.basePrice}</span>
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      <li class="event__offer">
-        <span class="event__offer-title">Order Uber</span>
+    ${point.offers.map((offer) =>
+    `<li class="event__offer">
+        <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">20</span>
-      </li>
+        <span class="event__offer-price">${offer.price}</span>
+    </li> `
+  ).join('')}
     </ul>
     <button class="event__favorite-btn event__favorite-btn--active" type="button">
       <span class="visually-hidden">Add to favorite</span>
@@ -42,8 +45,12 @@ const createPointTemplate = () =>
 `;
 
 class NewPointView {
+  constructor(point) {
+    this.point = point;
+  }
+
   getTemplate() {
-    return createPointTemplate();
+    return createPointTemplate(this.point);
   }
 
   getElement() {
